@@ -3,13 +3,7 @@ package com.vishal.admin_panel.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,12 +20,12 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String username;
 	@Column(unique = true, nullable = false)
-	private String password; 
+	private String password;
 	@Column(unique = true, nullable = false)
 	private String email;
-	
-	@Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 
 	private LocalDateTime createdAt = LocalDateTime.now();
