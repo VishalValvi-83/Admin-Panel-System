@@ -1,9 +1,11 @@
 package com.vishal.admin_panel.service.impl;
 
 import com.vishal.admin_panel.entity.User;
+import com.vishal.admin_panel.dto.AnalyticsDto;
 import com.vishal.admin_panel.dto.RegisterRequest;
 import com.vishal.admin_panel.entity.Role;
 import com.vishal.admin_panel.repository.RoleRepository;
+import com.vishal.admin_panel.repository.UserActivityRepository;
 import com.vishal.admin_panel.repository.UserRepository;
 import com.vishal.admin_panel.service.UserActivityService;
 import com.vishal.admin_panel.service.UserService;
@@ -25,15 +27,18 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private UserActivityService userActivityService;
+	private final UserActivityRepository userActivityRepository;
 
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public UserServiceImpl(UserRepository userRepository,
 			BCryptPasswordEncoder passwordEncoder,
-			UserActivityService userActivityService, RoleRepository roleRepository) {
+			UserActivityService userActivityService, RoleRepository roleRepository,
+			UserActivityRepository userActivityRepository) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.userActivityService = userActivityService;
+		this.userActivityRepository = userActivityRepository;
 		this.roleRepository = roleRepository;
 	}
 
@@ -133,4 +138,12 @@ public class UserServiceImpl implements UserService {
 		return savedUser;
 	}
 
+	@Override
+	public AnalyticsDto getSystemAnalytics() {
+		long totalUsers = userRepository.count();
+		long totalAdmins = userRepository.countByRole_RoleName("ADMIN");
+		long totalActivities = userActivityRepository.count();
+
+		return new AnalyticsDto(totalUsers, totalAdmins, totalActivities);
+	}
 }
