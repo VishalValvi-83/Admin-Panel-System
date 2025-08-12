@@ -5,11 +5,10 @@ import com.vishal.admin_panel.dto.RegisterRequest;
 import com.vishal.admin_panel.entity.Role;
 import com.vishal.admin_panel.repository.RoleRepository;
 import com.vishal.admin_panel.repository.UserRepository;
-
+import com.vishal.admin_panel.service.UserActivityService;
 import com.vishal.admin_panel.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +19,22 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+	private final RoleRepository roleRepository;
+
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private UserActivityService userActivityService;
 
 	private final BCryptPasswordEncoder passwordEncoder;
-	private final RoleRepository roleRepository;
-	
+
 	public UserServiceImpl(UserRepository userRepository,
-			RoleRepository roleRepository,
-			BCryptPasswordEncoder passwordEncoder) {
+			BCryptPasswordEncoder passwordEncoder,
+			UserActivityService userActivityService, RoleRepository roleRepository) {
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.userActivityService = userActivityService;
+		this.roleRepository = roleRepository;
 	}
 
 	@Override
@@ -106,8 +109,13 @@ public class UserServiceImpl implements UserService {
 			throw new RuntimeException("Email already taken");
 		}
 
-		Role role = roleRepository.findByRoleName(request.getRoleName())
-				.orElseThrow(() -> new RuntimeException("Role not found"));
+		Role role;
+		try {
+			role = roleRepository.findByRoleName(request.getRoleName().toUpperCase())
+					.orElseThrow(() -> new RuntimeException("Role not found"));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Invalid role: " + request.getRoleName());
+		}
 
 		User user = new User();
 		user.setUsername(request.getUsername());
@@ -116,6 +124,13 @@ public class UserServiceImpl implements UserService {
 		user.setRole(role);
 		user.setCreatedAt(LocalDateTime.now());
 		user.setUpdatedAt(LocalDateTime.now());
-		return userRepository.save(user);
+
+		User savedUser = userRepository.save(user);
+
+		// Log activity
+		userActivityService.logActivity(savedUser, "CREATE", "User registered with role: " + role);
+
+		return savedUser;
 	}
+
 }
