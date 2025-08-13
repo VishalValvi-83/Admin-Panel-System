@@ -1,9 +1,59 @@
-import React from 'react'
+/**
+ * Sidebar navigation for the admin dashboard.
+ * Allows switching between different sections.
+ * 
+ * @param {object} props - Component props.
+ * @param {function} props.onNavigate - Function to call when a navigation item is clicked.
+ * @param {string} props.currentPage - The currently active page.
+ */
+export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
+  const adminNavItems = [
+    { id: 'user-management', name: 'User Management' },
+    { id: 'task-manager', name: 'Task Manager' },
+    { id: 'analytics', name: 'Analytics' },
+    { id: 'system-config', name: 'System Configuration' },
+  ];
 
-const Sidebar = () => {
+  const managerNavItems = [
+    { id: 'manager-dashboard', name: 'Manager Dashboard' },
+    { id: 'assigned-users', name: 'Assigned Users' },
+    { id: 'department-analytics', name: 'Department Analytics' },
+  ];
+
+  const userNavItems = [
+    { id: 'user-dashboard', name: 'My Dashboard' },
+    { id: 'profile-management', name: 'Profile' },
+  ];
+
+  let navItems = [];
+  if (userRole === 'admin') {
+    navItems = adminNavItems;
+  } else if (userRole === 'manager') {
+    navItems = managerNavItems;
+  } else if (userRole === 'user') {
+    navItems = userNavItems;
+  }
+
   return (
-    <div>Sidebar</div>
-  )
-}
-
-export default Sidebar
+    <div className="w-64 bg-gray-800 text-white flex-shrink-0 p-4 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-6 text-blue-300">
+        {userRole === 'admin' ? 'Admin Panel' : userRole === 'manager' ? 'Manager Panel' : 'User Panel'}
+      </h2>
+      <nav>
+        <ul>
+          {navItems.map((item) => (
+            <li key={item.id} className="mb-2">
+              <button
+                onClick={() => onNavigate(item.id)}
+                className={`w-full text-left py-2 px-4 rounded-md transition-all duration-200 ease-in-out
+                  ${currentPage === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
+              >
+                {item.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+};

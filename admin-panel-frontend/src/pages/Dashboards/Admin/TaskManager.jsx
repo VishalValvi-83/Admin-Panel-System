@@ -2,7 +2,7 @@ import React from 'react'
 
 const TaskManager = () => {
   return (
-    <div>TaskManager</div>
+    <div className='text-zinc-700'>TaskManager</div>
   )
 }
 

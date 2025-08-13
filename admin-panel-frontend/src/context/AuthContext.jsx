@@ -1,25 +1,15 @@
-// src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import MockApiService from '../services/MockApiService'; // Assuming you create this service
+import {MockApiService} from '../services/MockApiService'; // Assuming you create this service
 
-// Create the context
-export const AuthContext = createContext(null);
-
-/**
- * AuthProvider component.
- * Manages the global authentication state (isAuthenticated, userRole, userId).
- * It fetches the mock API service for login/logout and provides the state to its children.
- */
-export const AuthProvider = ({ children }) => {
+const AuthContext = createContext(null);
+const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState('guest'); // Default role: 'guest'
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(true); // Initial loading state for auth check
 
-    // Simulate an initial authentication check (e.g., checking for a token in localStorage)
     useEffect(() => {
-        // In a real app, you'd check for a JWT token here.
-        // For this mock, we start unauthenticated.
+        //check for a JWT token here.
         setLoading(false);
     }, []);
 
@@ -44,10 +34,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    /**
-     * Simulates user logout.
-     * In a real app, this would clear tokens from localStorage/cookies.
-     */
     const logout = () => {
         setIsAuthenticated(false);
         setUserRole('guest');
@@ -70,3 +56,6 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+export { AuthContext, AuthProvider };
+export default AuthProvider;

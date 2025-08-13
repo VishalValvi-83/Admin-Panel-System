@@ -2,7 +2,7 @@ import React from 'react'
 
 const ManagerDashboard = () => {
   return (
-    <div>ManagerDashboard</div>
+    <div className='text-zinc-700'>ManagerDashboard</div>
   )
 }
 

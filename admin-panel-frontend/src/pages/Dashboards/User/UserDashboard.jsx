@@ -2,7 +2,7 @@ import React from 'react'
 
 const UserDashboard = () => {
   return (
-    <div>UserDashboard</div>
+    <div className='text-zinc-700'>UserDashboard</div>
   )
 }
 
