@@ -9,23 +9,27 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
 
-	@Bean
-	BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
-				.authorizeHttpRequests(authz -> authz.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("/api/admin/**").permitAll().requestMatchers("/api/admin/**").hasRole("ADMIN")
-						.requestMatchers("/api/manager/**").hasRole("MANAGER").requestMatchers("/api/user/**")
-						.hasRole("USER").anyRequest().authenticated());
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/api/auth/**").permitAll()
+                        // .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .anyRequest().authenticated());
 
-		return http.build();
-	}
+        return http.build();
+    }
 //     @Bean
 //     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //     http
