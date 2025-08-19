@@ -24,18 +24,35 @@ public class AuthController {
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@PostMapping("/login")
-	public LoginResponse login(@RequestBody LoginRequest loginRequest) {
-		Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
-		if (userOptional.isEmpty()) {
-			return new LoginResponse("error", "User not found with email: " + loginRequest.getEmail());
-		}
-		User user = userOptional.get();
-		if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-			return new LoginResponse("error", "Invalid password");
-		}
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
 
-		return new LoginResponse("success", "Login successful", user.getId(), user.getUsername(), user.getEmail(),
-				user.getRole().getRoleName());
-	}
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                return new LoginResponse(
+                        "success",
+                        "Login successful",
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getRole().getRoleName()
+                );
+            } else {
+                return new LoginResponse(
+                        "error",
+                        "Invalid password",
+                        null, null, null, null
+                );
+            }
+        } else {
+            return new LoginResponse(
+                    "error",
+                    "User not found with email: " + loginRequest.getEmail(),
+                    null, null, null, null
+            );
+        }
+    }
 
 }

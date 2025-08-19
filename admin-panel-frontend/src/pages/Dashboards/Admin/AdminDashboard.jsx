@@ -35,11 +35,8 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []); // Fetch users on component mount
+  }, []);
 
-  /**
-   * Opens the CreateUserModal in create mode.
-   */
   const handleCreateUser = () => {
     setUserToEdit(null);
     setIsModalOpen(true);
@@ -80,8 +77,8 @@ const AdminDashboard = () => {
           onClose: () => setMessageModal({ ...messageModal, isOpen: false })
         });
       }
-      setIsModalOpen(false); // Close the create/edit modal
-      fetchUsers(); // Re-fetch users to update the list
+      setIsModalOpen(false);
+      fetchUsers();
     } catch (error) {
       console.error("Error saving user:", error);
       setMessageModal({
@@ -123,7 +120,7 @@ const AdminDashboard = () => {
         message: 'User deleted successfully.',
         onClose: () => setMessageModal({ ...messageModal, isOpen: false })
       });
-      fetchUsers(); // Re-fetch users to update the list
+      fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
       setMessageModal({
