@@ -1,11 +1,4 @@
-/**
- * Sidebar navigation for the admin dashboard.
- * Allows switching between different sections.
- * 
- * @param {object} props - Component props.
- * @param {function} props.onNavigate - Function to call when a navigation item is clicked.
- * @param {string} props.currentPage - The currently active page.
- */
+
 export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
   const adminNavItems = [
     { id: 'user-management', name: 'User Management' },
@@ -26,18 +19,18 @@ export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
   ];
 
   let navItems = [];
-  if (userRole === 'admin') {
+  if (userRole === 'ADMIN') {
     navItems = adminNavItems;
-  } else if (userRole === 'manager') {
+  } else if (userRole === 'MANAGER') {
     navItems = managerNavItems;
-  } else if (userRole === 'user') {
+  } else if (userRole === 'USER') {
     navItems = userNavItems;
   }
 
   return (
     <div className="w-64 bg-gray-800 text-white flex-shrink-0 p-4 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-blue-300">
-        {userRole === 'admin' ? 'Admin Panel' : userRole === 'manager' ? 'Manager Panel' : 'User Panel'}
+        {userRole === 'ADMIN' ? 'Admin Panel' : userRole === 'MANAGER' ? 'Manager Panel' : 'User Panel'}
       </h2>
       <nav>
         <ul>

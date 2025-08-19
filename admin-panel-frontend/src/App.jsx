@@ -4,7 +4,7 @@ import TaskManager from './pages/Dashboards/Admin/TaskManager'
 import AnalyticsDashboard from './pages/Dashboards/Admin/AnalyticsDashboard'
 import SystemConfiguration from './pages/Dashboards/Admin/SystemConfiguration'
 import { AuthContext } from './context/AuthContext'
-import { LoginPage } from './pages/Auth/Login'
+import { Login, LoginPage } from './pages/Auth/Login'
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner'
 import DashboardLayout from './components/layout/DashboardLayout'
 import UserDashboard from './pages/Dashboards/User/UserDashboard'
@@ -17,51 +17,44 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('guest');
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true); // Simulate initial auth check
+  const [authLoading, setAuthLoading] = useState(true);
 
-  const [currentPage, setCurrentPage] = useState('user-management'); // Default Admin page
+  const [currentPage, setCurrentPage] = useState('user-management');
 
-  // Simulate initial auth check
   useEffect(() => {
-    // In a real app, you'd check for a JWT token here
-    // For this mock, we'll start unauthenticated.
+
     setAuthLoading(false);
   }, []);
 
-  /**
-   * Handles successful login, setting authentication state and user details.
-   * @param {object} userData - The logged-in user's data (id, email, role).
-   */
   const handleLoginSuccess = (userData) => {
     setIsAuthenticated(true);
     setUserRole(userData.role);
     setCurrentUserId(userData.id);
 
-    // Set initial page based on role after login
-    if (userData.role === 'admin') {
+    localStorage.setItem("user", JSON.stringify(userData));
+
+
+    if (userData.role === 'ADMIN') {
       setCurrentPage('user-management');
-    } else if (userData.role === 'manager') {
+    } else if (userData.role === 'MANAGER') {
       setCurrentPage('manager-dashboard');
-    } else if (userData.role === 'user') {
+    } else if (userData.role === 'USER') {
       setCurrentPage('user-dashboard');
     }
   };
 
-  /**
-   * Handles user logout, resetting authentication state.
-   */
   const handleLogout = () => {
     setIsAuthenticated(false);
     setUserRole('guest');
     setCurrentUserId(null);
-    setCurrentPage(''); // Reset page state after logout
+    setCurrentPage('');
+    localStorage.removeItem("user");
   };
 
   if (authLoading) {
     return <LoadingSpinner message="Checking authentication..." />;
   }
 
-  // Define the content for each page based on current user's role
   const renderPageContent = () => {
     switch (currentPage) {
       // Admin Pages
@@ -86,7 +79,7 @@ const App = () => {
       case 'profile-management':
         return <ProfileManagement />;
       default:
-        // Default to showing an appropriate dashboard if logged in, otherwise login page
+       
         if (isAuthenticated) {
           if (userRole === 'admin') return <UserManagement />;
           if (userRole === 'manager') return <ManagerDashboard />;
@@ -111,7 +104,7 @@ const App = () => {
             </div>
           </DashboardLayout>
         ) : (
-          <LoginPage onLoginSuccess={handleLoginSuccess} />
+          <Login onLoginSuccess={handleLoginSuccess} />
         )}
       </AuthContext.Provider>
 
