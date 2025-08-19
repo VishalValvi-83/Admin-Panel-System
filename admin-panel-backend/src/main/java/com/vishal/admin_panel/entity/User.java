@@ -24,8 +24,8 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String email;
 
-	@ManyToOne
-	@JoinColumn(name = "role_id", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id" , nullable = false)
 	private Role role;
 	private LocalDateTime createdAt = LocalDateTime.now();
 	private LocalDateTime updatedAt = LocalDateTime.now();

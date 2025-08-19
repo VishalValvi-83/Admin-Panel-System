@@ -42,11 +42,6 @@ public class UserServiceImpl implements UserService {
 		this.roleRepository = roleRepository;
 	}
 
-	@Override
-	public User saveUser(User user) {
-		return userRepository.save(user);
-	}
-
 	public User updateUser(Long id, User updatedUser) {
 		Optional<User> optionalUser = userRepository.findById(id);
 
@@ -106,7 +101,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User registerUser(RegisterRequest request) {
+	public User creatUserByAdmin(RegisterRequest request) {
 		if (userRepository.existsByUsername(request.getUsername())) {
 			throw new RuntimeException("Username already taken");
 		}

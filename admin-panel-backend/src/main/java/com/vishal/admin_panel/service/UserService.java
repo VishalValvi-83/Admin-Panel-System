@@ -9,9 +9,7 @@ import com.vishal.admin_panel.entity.Role;
 import com.vishal.admin_panel.entity.User;
 
 public interface UserService {
-	User registerUser(RegisterRequest request);
-
-	User saveUser(User user);
+	User creatUserByAdmin(RegisterRequest request);
 
 	User updateUser(Long id, User user);
 
