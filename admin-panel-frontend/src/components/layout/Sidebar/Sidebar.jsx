@@ -28,8 +28,8 @@ export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
   }
 
   return (
-    <div className="w-full sm:w-48 md:w-56 lg:w-64 bg-gray-800 text-white flex-shrink-0 p-4 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-blue-300">
+    <div className="w-full sm:w-48 md:w-56 lg:w-64 bg-gray-800 text-white flex-shrink-0 p-4 shadow-lg">
+      <h2 className="text-2xl text-center font-bold mb-6 text-blue-300">
         {userRole === 'ADMIN' ? 'Admin Panel' : userRole === 'MANAGER' ? 'Manager Panel' : 'User Panel'}
       </h2>
       <nav>

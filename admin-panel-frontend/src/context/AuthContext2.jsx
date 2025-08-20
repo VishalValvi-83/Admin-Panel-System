@@ -45,8 +45,8 @@ const AuthProvider = ({ children }) => {
             } else {
                 throw new Error(data.message || "Invalid login");
             }
-        } finally {
-            setLoading(false);
+        } catch (error) {
+            throw error.response?.data || { message: "Login failed" };
         }
     };
 
