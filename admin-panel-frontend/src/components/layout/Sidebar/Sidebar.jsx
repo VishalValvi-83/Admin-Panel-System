@@ -28,7 +28,7 @@ export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
   }
 
   return (
-    <div className="w-64 bg-gray-800 text-white flex-shrink-0 p-4 rounded-lg shadow-lg">
+    <div className="w-full sm:w-48 md:w-56 lg:w-64 bg-gray-800 text-white flex-shrink-0 p-4 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-blue-300">
         {userRole === 'ADMIN' ? 'Admin Panel' : userRole === 'MANAGER' ? 'Manager Panel' : 'User Panel'}
       </h2>
@@ -39,7 +39,7 @@ export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
               <button
                 onClick={() => onNavigate(item.id)}
                 className={`w-full text-left py-2 px-4 rounded-md transition-all duration-200 ease-in-out
-                  ${currentPage === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
+              ${currentPage === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
               >
                 {item.name}
               </button>
