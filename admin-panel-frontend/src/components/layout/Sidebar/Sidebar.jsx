@@ -1,15 +1,7 @@
 
-import { Link, useLocation } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../../../context/AuthContext2';
-
-export const Sidebar = () => {
-  const { userRole, logout } = useContext(AuthContext);
-  const location = useLocation();
-  const currentPage = location.pathname.substring(1);
-
+export const Sidebar = ({ onNavigate, currentPage, userRole }) => {
   const adminNavItems = [
-    { id: 'admin-dashboard', name: 'Admin Dashboard' },
+    { id: 'user-management', name: 'User Management' },
     { id: 'task-manager', name: 'Task Manager' },
     { id: 'analytics', name: 'Analytics' },
     { id: 'system-config', name: 'System Configuration' },
@@ -44,26 +36,17 @@ export const Sidebar = () => {
         <ul>
           {navItems.map((item) => (
             <li key={item.id} className="mb-2">
-              <Link
-                to={`/${item.id}`}
-
-                className={`w-full text-left py-2 px-4 rounded-md transition-all duration-200 ease-in-out block
+              <button
+                onClick={() => onNavigate(item.id)}
+                className={`w-full text-left py-2 px-4 rounded-md transition-all duration-200 ease-in-out
               ${currentPage === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
               >
                 {item.name}
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
       </nav>
-      <div className="flex flex-col-reverse md:flex-col mt-auto">
-        <button
-          onClick={logout}
-          className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 shadow-md"
-        >
-          Logout
-        </button>
-      </div>
     </div>
   );
 };

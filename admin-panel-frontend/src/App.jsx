@@ -1,81 +1,97 @@
-import React, { useContext } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from './context/AuthContext2';
+import React, { useContext, useEffect, useState } from 'react'
+import AdminDashboard from './pages/Dashboards/Admin/AdminDashboard'
+import TaskManager from './pages/Dashboards/Admin/TaskManager'
+import AnalyticsDashboard from './pages/Dashboards/Admin/AnalyticsDashboard'
+import SystemConfiguration from './pages/Dashboards/Admin/SystemConfiguration'
+import { Login } from './pages/Auth/Login'
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner'
+import DashboardLayout from './components/layout/DashboardLayout'
+import UserDashboard from './pages/Dashboards/User/UserDashboard'
+import ProfileManagement from './pages/Dashboards/User/ProfileManagement'
+import ManagerDashboard from './pages/Dashboards/Manager/ManagerDashboard'
+import AssignedUsers from './pages/Dashboards/Manager/AssignedUsers'
+import DepartmentAnalytics from './pages/Dashboards/Manager/DepartmentAnalytics'
+import { AuthContext } from './context/AuthContext2'
 import { Toaster } from 'react-hot-toast';
-import DashboardLayout from './components/layout/DashboardLayout';
-import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
-import { Login } from './pages/Auth/Login';
-import AdminDashboard from './pages/Dashboards/Admin/AdminDashboard';
-import TaskManager from './pages/Dashboards/Admin/TaskManager';
-import AnalyticsDashboard from './pages/Dashboards/Admin/AnalyticsDashboard';
-import SystemConfiguration from './pages/Dashboards/Admin/SystemConfiguration';
-import ManagerDashboard from './pages/Dashboards/Manager/ManagerDashboard';
-import AssignedUsers from './pages/Dashboards/Manager/AssignedUsers';
-import DepartmentAnalytics from './pages/Dashboards/Manager/DepartmentAnalytics';
-import UserDashboard from './pages/Dashboards/User/UserDashboard';
-import ProfileManagement from './pages/Dashboards/User/ProfileManagement';
-
-const ProtectedRoute = ({ allowedRoles }) => {
-  const { isAuthenticated, userRole, loading } = useContext(AuthContext);
-  if (loading) {
-    return <LoadingSpinner message="Checking authentication..." />;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  return <Outlet />;
-};
-
+import { Navigate, Route, Routes } from 'react-router-dom'
 const App = () => {
-  const { isAuthenticated, userRole, loading } = useContext(AuthContext);
+  const { isAuthenticated, userRole, userId, loading, logout } = useContext(AuthContext);  // const [isNewAuthenticated, setIsNewAuthenticated] = useState(false);
+  const [currentPage, setCurrentPage] = useState('user-management');
 
-  // if (!loading && !isAuthenticated) {
-  //   return <Navigate to="/login" replace />;
-  // }
-  if (loading) {
+  const [authLoading, setAuthLoading] = useState(loading);
+  console.log(isAuthenticated)
+  useEffect(() => {
+    if (isAuthenticated) {
+      setCurrentPage(userRole === 'ADMIN' ? 'user-management' : userRole === 'MANAGER' ? 'manager-dashboard' : 'user-dashboard');
+    } else {
+      setTimeout(() => {
+        setAuthLoading(false);
+      }, 2000);
+      setCurrentPage('');
+    }
+
+  }, [userId, isAuthenticated, userRole]);
+
+  if (authLoading) {
     return <LoadingSpinner message="Checking authentication..." />;
   }
 
+  const renderPageContent = () => {
+    switch (currentPage) {
+      // Admin Pages
+      case 'user-management':
+        return <AdminDashboard />;
+      case 'task-manager':
+        return <TaskManager />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
+      case 'system-config':
+        return <SystemConfiguration />;
+      // Manager Pages
+      case 'manager-dashboard':
+        return <ManagerDashboard />;
+      case 'assigned-users':
+        return <AssignedUsers />;
+      case 'department-analytics':
+        return <DepartmentAnalytics />;
+      // User Pages
+      case 'user-dashboard':
+        return <UserDashboard />;
+      case 'profile-management':
+        return <ProfileManagement />;
+      default:
+
+        if (isAuthenticated) {
+          if (userRole === 'admin') return <UserManagement />;
+          if (userRole === 'manager') return <ManagerDashboard />;
+          if (userRole === 'user') return <UserDashboard />;
+        }
+        return <div className="text-center text-gray-600 mt-10">Select a page from the sidebar.</div>;
+    }
+  };
   return (
     <>
+      {isAuthenticated ? (
+        <DashboardLayout onNavigate={setCurrentPage} currentPage={currentPage} userRole={userRole}>
+          {renderPageContent()}
+          <div className="mt-8 flex justify-end">
+            <button
+              onClick={logout}
+              className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 shadow-md"
+            >
+              Logout
+            </button>
+          </div>
+        </DashboardLayout>
+      ) : (
+        <Login />
+      )}
       <Routes>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-
-        <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'MANAGER', 'USER']} />}>
-          <Route element={<DashboardLayout />}>
-
-            {/* Admin Routes */}
-            <Route path="admin-dashboard" element={<AdminDashboard />} />
-            <Route path="task-manager" element={<TaskManager />} />
-            <Route path="analytics" element={<AnalyticsDashboard />} />
-            <Route path="system-config" element={<SystemConfiguration />} />
-
-            {/* Manager Routes */}
-            <Route path="manager-dashboard" element={<ManagerDashboard />} />
-            <Route path="assigned-users" element={<AssignedUsers />} />
-            <Route path="department-analytics" element={<DepartmentAnalytics />} />
-
-            {/* User Routes */}
-            <Route path="user-dashboard" element={<UserDashboard />} />
-            <Route path="profile-management" element={<ProfileManagement />} />
-
-            {/* Default route after login */}
-            <Route index element={<Navigate to={userRole === 'ADMIN' ? "admin-dashboard" : userRole === 'MANAGER' ? "manager-dashboard" : "user-dashboard"} />} />
-          </Route>
-        </Route>
-
-        <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to={`/${userRole.toLowerCase()}`} replace />} />
       </Routes>
       <Toaster />
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App
