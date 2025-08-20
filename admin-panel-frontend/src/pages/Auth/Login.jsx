@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
-import { MockApiService } from '../../services/MockApiService'
-
-
-import { AuthApiService } from '../../services/AuthApiSerivce'
-
-export const Login = ({ onLoginSuccess }) => {
-  // const { login } = useContext(AuthContext);
+import { useAuth } from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
+export const Login = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("aditya@example.com");
   const [password, setPassword] = useState("aditya");
   const [loading, setLoading] = useState(false);
@@ -16,13 +13,11 @@ export const Login = ({ onLoginSuccess }) => {
     setLoading(true);
     setError("");
     try {
-      const response = await AuthApiService.login(email, password);
-      onLoginSuccess(response);
-      alert(response.message)
-      console.log(response)
+      const response = await login(email, password);
+      toast.success(response.message)
     } catch (err) {
-      setError(err.message || "Login failed");
-      console.log(err)
+      setError("Login failed");
+      console.error(err);
     } finally {
       setLoading(false);
     }
