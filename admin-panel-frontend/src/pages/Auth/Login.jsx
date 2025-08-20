@@ -93,6 +93,7 @@ export const Login = ({ onLoginSuccess }) => {
     try {
       const response = await AuthApiService.login(email, password);
       onLoginSuccess(response);
+      alert(response.message)
       console.log(response)
     } catch (err) {
       setError(err.message || "Login failed");
