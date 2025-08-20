@@ -1,26 +1,11 @@
 import { useAuth } from "../../hooks/useAuth";
 import { Sidebar } from "./Sidebar/Sidebar";
 
-/**
- * Layout component for the dashboards, including a sidebar and main content area.
- *
- * @param {object} props - Component props.
- * @param {React.ReactNode} props.children - The content to display in the main area.
- * @param {function} props.onNavigate - Function for sidebar navigation.
- * @param {string} props.currentPage - The currently active page in the sidebar.
- * @param {string} props.userRole - The role of the currently logged-in user.
- */
 const DashboardLayout = ({ children, onNavigate, currentPage, userRole }) => {
-    const { userId } = useAuth(); // Using userId from AuthContext for display
+    const { userId } = useAuth();
 
-    // Function to format page title
-    const formatPageTitle = (pageId) => {
-        // Specific titles for user/manager dashboards
-        if (pageId === 'manager-dashboard') return 'Manager Dashboard';
-        if (pageId === 'user-dashboard') return 'My Dashboard';
-
-        // General formatting for other pages
-        return pageId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const formatPageTitle = (activePageTitle) => {
+        return activePageTitle.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     };
 
 
