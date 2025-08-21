@@ -13,9 +13,9 @@ const DashboardLayout = ({ children, onNavigate, currentPage, userRole }) => {
 
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 overflow-y-scroll">
             <Sidebar onNavigate={onNavigate} currentPage={currentPage} userRole={userRole} />
-            <div className="flex-grow bg-white rounded-lg shadow-xl p-6 md:mt-0 overflow-auto">
+            <div className="flex-grow bg-white rounded-lg shadow-xl p-6 md:mt-0 overflow-y-scroll ">
                 <header className="mb-8 border-b border-gray-200">
                     <p className="text-3xl font-extrabold text-gray-900 pb-4 ">
                         {formatPageTitle(currentPage)}

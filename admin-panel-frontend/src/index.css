@@ -14,7 +14,7 @@
     linear-gradient(315deg, #F8F8F9 25%, transparent 25%),
     linear-gradient(45deg, #F8F8F9 25%, transparent 25%);
   background-size: 500px 500px;
-  
+
   background-color: #2c3433;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,13 +44,42 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-image: linear-gradient(to right, #4b6cb7 0%, #182848 51%, #4b6cb7 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
   cursor: pointer;
-  transition: border-color 0.25s;
+  
 }
 
 button:hover {
-  border-color: #646cff;
+  background-position: right center;
+  /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-grad {
+  background-image: linear-gradient(to right, #4b6cb7 0%, #182848 51%, #4b6cb7 100%)
+}
+
+.btn-grad {
+  margin: 10px;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
 }
 
 button:focus,

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-
+import { toast } from 'react-hot-toast';
 const ProfileManagement = () => {
     const [profile, setProfile] = useState({
         name: '',
@@ -58,7 +58,8 @@ const ProfileManagement = () => {
 
         setTimeout(() => {
             setIsLoading(false);
-            setSuccessMessage('Profile updated successfully!');
+            // setSuccessMessage('Profile updated successfully!');
+            toast.success("Profile updated successfully!");
         }, 1000);
     };
 
@@ -105,12 +106,12 @@ const ProfileManagement = () => {
             {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">{error}</div>}
             {successMessage && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">{successMessage}</div>}
             {/* Personal Information Section */}
-            <div className="bg-white p-8 rounded-xl  text-gray-600  shadow-lg mb-8">
-                <div className='profile-image-container p-5 flex items-center'>
-                    <img src={profile.avatar} alt="Avatar" className="w-32 h-32 rounded-full object-cover" />
+            <div className="bg-white p-8 rounded-xl text-gray-600 shadow-lg mb-8">
+                <div className='profile-image-container flex items-center border-b border-gray-300 p-4 mb-3'>
+                    <img src={profile.avatar} alt="Avatar" className="w-32 h-32 mask mask-squircle object-cover" />
                     <div className='ml-4'>
-                        <h2 className="text-2xl font-semibold text-gray-700">{profile.name}</h2>
-                        <p className="text-gray-600">{profile.email}</p>
+                        <h2 className="text-3xl font-bold text-gray-700">{profile.name}</h2>
+                        <p className="text-gray-600 text-sm bg-amber-100 px-2 text-center rounded-md">{profile.email}</p>
                     </div>
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-700 mb-6">Personal Information</h2>
