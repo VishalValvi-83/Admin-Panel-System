@@ -1,7 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import { AuthApiService } from '../../../services/AuthApiSerivce';
+import { useAuth } from '../../../hooks/useAuth';
 const ProfileManagement = () => {
+    const { userId } = useAuth();
+    console.log(userId)
     const [profile, setProfile] = useState({
         name: '',
         email: '',
@@ -20,17 +23,31 @@ const ProfileManagement = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setProfile({
-                name: 'Vishal Valvi ',
-                email: 'vishal@example.com',
-                bio: '',
-                avatar: 'https://placehold.co/150x150',
-            });
-            setIsLoading(false);
-        }, 1500);
-    }, []);
+        const fetchProfile = async () => {
+            setIsLoading(true);
+            try {
+                const data = JSON.parse(localStorage.getItem('user'));
+                console.log(data);
+                const name = data.username.charAt(0).toUpperCase() + data.username.slice(1)
+
+                setProfile({
+                    name: name,
+                    email: data.email,
+                    bio: data.bio || '',
+                    avatar: data.avatar || 'https://placehold.co/150x150',
+                });
+            } catch (error) {
+                setError(error.message);
+                toast.error("Failed to fetch profile.");
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 1500);
+            }
+        };
+
+        fetchProfile();
+    }, [userId]);
 
     const handleProfileChange = (e) => {
         const { name, value } = e.target;
@@ -40,27 +57,32 @@ const ProfileManagement = () => {
         }));
     };
 
-    // const handlePasswordChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setPassword(prevPassword => ({
-    //         ...prevPassword,
-    //         [name]: value,
-    //     }));
-    // };
-
-    const handleProfileSubmit = (e) => {
+    const handleProfileSubmit = async (e) => {
         e.preventDefault();
         setSuccessMessage('');
         setError(null);
         setIsLoading(true);
 
-        console.log('Updating profile with:', profile);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            // setSuccessMessage('Profile updated successfully!');
+        try {
+            if (!userId) {
+                setError("User not found. Please login again.");
+                setIsLoading(false);
+                return;
+            }
+            const updatedUser = {
+                username: profile.name,
+                email: profile.email,
+                bio: profile.bio,
+                avatar: profile.avatar,
+            }
+            await AuthApiService.updateUserProfile(userId, updatedUser);
             toast.success("Profile updated successfully!");
-        }, 1000);
+        } catch (error) {
+            setError(error.message);
+            toast.error("Failed to update profile.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     // const handlePasswordSubmit = (e) => {
@@ -92,7 +114,7 @@ const ProfileManagement = () => {
     //     }, 1000);
     // };
 
-    if (isLoading && !profile.name) {
+    if (isLoading) {
         return <div className="flex flex-col gap-4 min-h-screen">
             <div className="skeleton h-32 w-full"></div>
             <div className="skeleton h-4 w-28"></div>
