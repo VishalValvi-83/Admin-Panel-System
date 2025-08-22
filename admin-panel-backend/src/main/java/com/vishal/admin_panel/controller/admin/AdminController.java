@@ -41,12 +41,12 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/user/update/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/delete/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }

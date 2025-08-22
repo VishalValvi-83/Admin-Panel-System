@@ -1,11 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import { AuthApiService } from '../../../services/AuthApiSerivce';
+import { useAuth } from '../../../hooks/useAuth';
 const ProfileManagement = () => {
+    const { userId } = useAuth();
+    console.log(userId)
     const [profile, setProfile] = useState({
         name: '',
         email: '',
-        bio: '',
+        createdAt: '',
         avatar: 'https://placehold.co/150x150',
     });
 
@@ -20,17 +23,31 @@ const ProfileManagement = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setProfile({
-                name: 'Vishal Valvi ',
-                email: 'vishal@example.com',
-                bio: '',
-                avatar: 'https://placehold.co/150x150',
-            });
-            setIsLoading(false);
-        }, 1500);
-    }, []);
+        const fetchProfile = async () => {
+            setIsLoading(true);
+            try {
+                const data = await AuthApiService.getUserProfile(userId);;
+                console.log("user profile", data);
+                const name = data.username.charAt(0).toUpperCase() + data.username.slice(1)
+
+                setProfile({
+                    name: name,
+                    email: data.email,
+                    createdAt: new Date( data.createdAt).toLocaleString(),
+                    avatar: data.avatar || 'https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg',
+                });
+            } catch (error) {
+                setError(error.message);
+                toast.error("Failed to fetch profile.");
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 1500);
+            }
+        };
+
+        fetchProfile();
+    }, [userId]);
 
     const handleProfileChange = (e) => {
         const { name, value } = e.target;
@@ -40,27 +57,31 @@ const ProfileManagement = () => {
         }));
     };
 
-    // const handlePasswordChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setPassword(prevPassword => ({
-    //         ...prevPassword,
-    //         [name]: value,
-    //     }));
-    // };
-
-    const handleProfileSubmit = (e) => {
+    const handleProfileSubmit = async (e) => {
         e.preventDefault();
         setSuccessMessage('');
         setError(null);
         setIsLoading(true);
 
-        console.log('Updating profile with:', profile);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            // setSuccessMessage('Profile updated successfully!');
+        try {
+            if (!userId) {
+                setError("User not found. Please login again.");
+                setIsLoading(false);
+                return;
+            }
+            const updatedUser = {
+                username: profile.name,
+                email: profile.email,
+                updatedAt: new Date().toISOString(),
+            }
+            await AuthApiService.updateUserProfile(userId, updatedUser);
             toast.success("Profile updated successfully!");
-        }, 1000);
+        } catch (error) {
+            setError(error.message);
+            toast.error("Failed to update profile.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     // const handlePasswordSubmit = (e) => {
@@ -92,8 +113,8 @@ const ProfileManagement = () => {
     //     }, 1000);
     // };
 
-    if (isLoading && !profile.name) {
-        return <div className="flex flex-col gap-4 min-h-screen">
+    if (isLoading) {
+        return <div className="flex flex-col gap-4">
             <div className="skeleton h-32 w-full"></div>
             <div className="skeleton h-4 w-28"></div>
             <div className="skeleton h-4 w-full"></div>
@@ -102,7 +123,7 @@ const ProfileManagement = () => {
     }
 
     return (
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-200 rounded-2xl min-h-screen">
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-200 rounded-2xl">
             {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">{error}</div>}
             {successMessage && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">{successMessage}</div>}
             {/* Personal Information Section */}
@@ -110,8 +131,9 @@ const ProfileManagement = () => {
                 <div className='profile-image-container flex items-center border-b border-gray-300 p-4 mb-3'>
                     <img src={profile.avatar} alt="Avatar" className="w-32 h-32 mask mask-squircle object-cover" />
                     <div className='ml-4'>
-                        <h2 className="text-3xl font-bold text-gray-700">{profile.name}</h2>
-                        <p className="text-gray-600 text-sm bg-amber-100 px-2 text-center rounded-md">{profile.email}</p>
+                        <h1 className="text-4xl font-bold text-gray-700 mb-1.5">{profile.name}</h1>
+                        <div className="badge badge-soft text-lg badge-primary">{profile.email}</div>
+                        <spam className="block text-gray-400 text-xs text-center">Joined At: {profile.createdAt}</spam>
                     </div>
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-700 mb-6">Personal Information</h2>
@@ -156,7 +178,7 @@ const ProfileManagement = () => {
                         </div>
                     </div>
 
-                    <div className="mb-6">
+                    {/*<div className="mb-6">
                         <label htmlFor="bio" className="block text-sm font-medium text-gray-600 mb-1">Biography</label>
                         <textarea
                             id="bio"
@@ -167,7 +189,7 @@ const ProfileManagement = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             placeholder="Tell us a little about yourself..."
                         ></textarea>
-                    </div>
+                    </div>*/}
 
                     <div className="flex justify-end">
                         <button

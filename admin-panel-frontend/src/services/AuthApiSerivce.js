@@ -16,10 +16,18 @@ export const AuthApiService = {
     },
     getUserProfile: async (userId) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/user/info/${userId}`);
+            const response = await axios.get(`${API_BASE_URL}/user/${userId}`);
             return response.data;
         } catch (error) {
             throw error.response?.data || { message: "Failed to fetch user profile" };
+        }
+    },
+    updateUserProfile: async (userId, userData) => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/user/update/${userId}`, userData);
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: "Failed to update user profile" };
         }
     }
 };

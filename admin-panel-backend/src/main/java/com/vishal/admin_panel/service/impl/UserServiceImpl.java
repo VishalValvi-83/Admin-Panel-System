@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
 
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public UserServiceImpl(UserRepository userRepository,
-			BCryptPasswordEncoder passwordEncoder,
+	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,
 			UserActivityService userActivityService, RoleRepository roleRepository,
 			UserActivityRepository userActivityRepository) {
 		this.userRepository = userRepository;
@@ -67,7 +66,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		return userRepository.findById(id);
+		// get password in original form
+		Optional<User> userOptional = userRepository.findById(id);
+		if (userOptional.isPresent()) {
+			User user = userOptional.get();
+			//
+			user.setPassword(null);
+			
+			
+			return Optional.of(user);
+		}
+		return Optional.empty();
 	}
 
 	@Override
