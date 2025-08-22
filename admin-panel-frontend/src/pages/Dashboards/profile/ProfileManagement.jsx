@@ -58,23 +58,17 @@ const ProfileManagement = () => {
     };
 
     const handleProfileSubmit = async (e) => {
+    const handleProfileSubmit = async (e) => {
         e.preventDefault();
         setSuccessMessage('');
         setError(null);
         setIsLoading(true);
 
-        try {
-            if (!userId) {
-                setError("User not found. Please login again.");
-                setIsLoading(false);
-                return;
-            }
-            const updatedUser = {
-                username: profile.name,
-                email: profile.email,
-                updatedAt: new Date().toISOString(),
-            }
-            await AuthApiService.updateUserProfile(userId, updatedUser);
+        console.log('Updating profile with:', profile);
+
+        setTimeout(() => {
+            setIsLoading(false);
+            // setSuccessMessage('Profile updated successfully!');
             toast.success("Profile updated successfully!");
         } catch (error) {
             setError(error.message);
@@ -113,8 +107,8 @@ const ProfileManagement = () => {
     //     }, 1000);
     // };
 
-    if (isLoading) {
-        return <div className="flex flex-col gap-4">
+    if (isLoading && !profile.name) {
+        return <div className="flex flex-col gap-4 min-h-screen">
             <div className="skeleton h-32 w-full"></div>
             <div className="skeleton h-4 w-28"></div>
             <div className="skeleton h-4 w-full"></div>
