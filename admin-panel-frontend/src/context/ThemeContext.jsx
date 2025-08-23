@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ThemeContext } from './ThemeContextDef';
 
 export default function ThemeProvider({ children }) {
-  const persistedTheme = "dark";
+  const persistedTheme = localStorage.getItem('theme');
   const [theme, setTheme] = useState(persistedTheme || 'light');
 
   const changeCurrentTheme = (newTheme) => {
