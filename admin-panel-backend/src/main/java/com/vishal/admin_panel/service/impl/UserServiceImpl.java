@@ -41,21 +41,42 @@ public class UserServiceImpl implements UserService {
 		this.roleRepository = roleRepository;
 	}
 
-	public User updateUser(Long id, User updatedUser) {
-		Optional<User> optionalUser = userRepository.findById(id);
+	public User updateUser(Long id, User updatedUser) throws Exception {
+		User existingUser = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-		if (optionalUser.isPresent()) {
-			User existingUser = optionalUser.get();
+		boolean isModified = false;
+
+		if (updatedUser.getUsername() != null && !updatedUser.getUsername().equals(existingUser.getUsername())) {
 
 			existingUser.setUsername(updatedUser.getUsername());
-			existingUser.setEmail(updatedUser.getEmail());
-			existingUser.setPassword(updatedUser.getPassword());
-			existingUser.setRole(updatedUser.getRole());
-			existingUser.setUpdatedAt(LocalDateTime.now());
+			isModified = true;
+		}
 
+		if (updatedUser.getEmail() != null && !updatedUser.getEmail().equals(existingUser.getEmail())) {
+			existingUser.setEmail(updatedUser.getEmail());
+			isModified = true;
+		}
+
+		if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+			if (!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword())) {
+				existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+				isModified = true;
+			}
+		}
+
+		if (updatedUser.getRole() != null &&
+				!updatedUser.getRole().equals(existingUser.getRole())) {
+			existingUser.setRole(updatedUser.getRole());
+			isModified = true;
+		}
+
+		if (isModified) {
+			existingUser.setUpdatedAt(LocalDateTime.now());
 			return userRepository.save(existingUser);
 		} else {
-			throw new RuntimeException("User not found with id: " + id);
+			throw new Exception("No changes detected for user with id: " + id
+					+ ". The provided data is the same as the existing data.");
 		}
 	}
 
@@ -66,14 +87,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		// get password in original form
 		Optional<User> userOptional = userRepository.findById(id);
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
-			//
 			user.setPassword(null);
-			
-			
+
 			return Optional.of(user);
 		}
 		return Optional.empty();
