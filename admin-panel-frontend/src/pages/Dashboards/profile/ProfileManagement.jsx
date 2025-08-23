@@ -146,24 +146,24 @@ const ProfileManagement = () => {
     }
 
     return (
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl">
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-700 rounded-2xl">
             {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">{error}</div>}
             {successMessage && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">{successMessage}</div>}
             {/* Personal Information Section */}
-            <div className="bg-white p-8 rounded-xl text-gray-600 shadow-lg mb-8">
+            <div className="bg-white p-8 rounded-xl text-gray-600 shadow-lg mb-8 dark:bg-gray-800 dark:text-gray-300">
                 <div className='profile-image-container flex flex-wrap justify-center md:justify-start items-center border-b border-gray-300 p-4 mb-3'>
-                    <img src={profile.avatar} alt="Avatar" className="w-32 h-32 mx-auto md:mx-0 mask mask-squircle object-cover" />
-                    <div className='md:ml-4 text-center md:text-left'>
-                        <h2 className="md:text-4xl text-2xl font-bold text-gray-700 mb-1.5">{profile.name}</h2>
-                        <div className="badge badge-soft md:w-auto sm:text-lg text-md badge-primary">{profile.email}</div>
-                        <span className="block text-gray-400 text-xs text-center">Joined on: {profile.createdAt}</span>
+                    <img src={profile.avatar} alt="Avatar" className="w-32 h-32 mx-auto sm:mx-0 mask mask-squircle object-cover" />
+                    <div className='sm:ml-4 sm:text-left'>
+                        <h2 className="sm:text-4xl text-2xl font-bold mb-1.5">{profile.name}</h2>
+                        <div className="badge badge-neutral bg-gray-600 w-auto">{profile.email}</div>
+                        <span className="block text-gray-400 text-xs mt-1">Joined on: {profile.createdAt}</span>
                     </div>
                 </div>
-                <h2 className="sm:text-2xl text-xl font-semibold text-gray-800 mb-6">Personal Information</h2>
+                <h2 className="sm:text-2xl text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Personal Information</h2>
                 <form onSubmit={handleProfileSubmit}>
-                    <div className="flex flex-col md:flex-row items-center text-gray-600 mb-6">
-                        <div className="flex-grow">
-                            <label htmlFor="avatar" className="block text-sm font-medium text-gray-600 mb-1">Avatar URL</label>
+                    <div className="flex flex-col md:flex-row items-center text-gray-600 dark:text-gray-300 mb-6">
+                        <div className="w-full md:mb-0">
+                            <label htmlFor="avatar" className="text-sm font-medium mb-1">Avatar URL</label>
                             <input
                                 type="text"
                                 id="avatar"
@@ -176,9 +176,9 @@ const ProfileManagement = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 text-gray-600 dark:text-gray-300">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
+                            <label htmlFor="name" className="block text-sm font-medium  mb-1">Full Name</label>
                             <input
                                 type="text"
                                 id="name"
@@ -189,7 +189,7 @@ const ProfileManagement = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1">Email Address</label>
+                            <label htmlFor="email" className="block text-sm font-medium mb-1">Email Address</label>
                             <input
                                 type="email"
                                 id="email"
@@ -227,12 +227,12 @@ const ProfileManagement = () => {
             </div>
 
             {/* Change Password Section */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="sm:text-2xl text-xl font-semibold text-gray-800 mb-6">Change Password</h2>
+            <div className="bg-white p-8 rounded-xl shadow-lg dark:bg-gray-800 text-gray-600 dark:text-gray-300 mb-8">
+                <h2 className="sm:text-2xl text-xl font-semibold mb-6">Change Password</h2>
                 <form onSubmit={handlePasswordSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-600 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div>
-                            <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-600 mb-1">Current Password</label>
+                            <label htmlFor="currentPassword" className="block text-sm font-medium mb-1">Current Password</label>
                             <input
                                 type="password"
                                 id="currentPassword"
@@ -245,7 +245,7 @@ const ProfileManagement = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-600 mb-1">New Password</label>
+                            <label htmlFor="newPassword" className="block text-sm font-medium mb-1">New Password</label>
                             <input
                                 type="password"
                                 id="newPassword"
@@ -259,7 +259,7 @@ const ProfileManagement = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-600 mb-1">Confirm New Password</label>
+                            <label htmlFor="confirmNewPassword" className="block text-sm font-medium mb-1">Confirm New Password</label>
                             <input
                                 type="password"
                                 id="confirmNewPassword"

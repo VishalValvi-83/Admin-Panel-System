@@ -30,10 +30,10 @@ export const Sidebar = ({ onNavigate, currentPage, userRole, isSidebarOpen, setI
   }
 
   return (
-    <div className={`fixed inset-y-0 max-h-screen left-0 z-40 w-64 bg-gray-800 text-white p-4 shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-shrink-0 md:w-56 lg:w-64`}>
-      <div className="flex flex-col  w-full">
+    <div className={`fixed inset-y-0 max-h-screen left-0 z-40 w-64 dark:bg-gray-800 bg-blue-50 text-white p-4 shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-shrink-0 md:w-56 lg:w-64`}>
+      <div className="flex flex-col w-full">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl text-center font-bold text-blue-300">
+          <h2 className="text-2xl text-center font-bold text-shadow-blue-900 dark:text-shadow-blue-200">
             {userRole === 'ADMIN' ? 'Admin Panel' : userRole === 'MANAGER' ? 'Manager Panel' : 'User Panel'}
           </h2>
           <button
@@ -50,7 +50,7 @@ export const Sidebar = ({ onNavigate, currentPage, userRole, isSidebarOpen, setI
                 <button
                   onClick={() => onNavigate(item.id)}
                   className={`w-full text-left py-2 px-4 rounded-md transition-all duration-200 ease-in-out
-              ${currentPage === item.id ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
+              ${currentPage === item.id ? ' text-white dark:text-blue-900 shadow-md' : 'hover:bg-gray-700 hover:text-blue-200'}`}
                 >
                   {item.name}
                 </button>
