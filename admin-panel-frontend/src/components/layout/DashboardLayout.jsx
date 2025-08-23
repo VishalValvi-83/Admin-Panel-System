@@ -1,9 +1,9 @@
-import { useAuth } from "../../hooks/useAuth";
+import { useState } from "react";
 import { Sidebar } from "./Sidebar/Sidebar";
+import { Menu } from "lucide-react";
 
 const DashboardLayout = ({ children, onNavigate, currentPage, userRole }) => {
-    const { userId } = useAuth();
-    console.log(userId)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const formatPageTitle = (activePageTitle) => {
         if (currentPage == "profile-management") return "Profile"
@@ -11,23 +11,22 @@ const DashboardLayout = ({ children, onNavigate, currentPage, userRole }) => {
         return activePageTitle.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     };
 
-
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 overflow-y-scroll">
-            <Sidebar onNavigate={onNavigate} currentPage={currentPage} userRole={userRole} />
-            <div className="flex-grow bg-white rounded-lg shadow-xl p-6 md:mt-0 overflow-y-scroll ">
-                <header className="mb-8 border-b border-gray-200">
-                    <p className="text-3xl font-extrabold text-gray-900 pb-4 ">
+        <div className="h-screen flex flex-row bg-gray-100">
+            <Sidebar onNavigate={onNavigate} currentPage={currentPage} userRole={userRole} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+            <div className="flex-grow flex flex-col bg-white shadow-xl overflow-y-auto">
+                <header className="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white z-10">
+                    <p className="text-3xl font-extrabold text-gray-900">
                         {formatPageTitle(currentPage)}
                     </p>
-                    {/* {userId && (
-                        <p className="text-sm text-gray-500">
-                            Logged in as: <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-xs">{userId}</span>
-                        </p>
-                    )} */}
-
+                    <button
+                        className="md:hidden p-2 rounded-md hover:bg-gray-200"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        <Menu size={24} />
+                    </button>
                 </header>
-                <main className="min-h-[70vh]">
+                <main className="p-6 flex-grow">
                     {children}
                 </main>
             </div>
