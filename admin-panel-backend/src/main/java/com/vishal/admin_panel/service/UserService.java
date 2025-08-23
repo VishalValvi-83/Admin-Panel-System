@@ -11,7 +11,7 @@ import com.vishal.admin_panel.entity.User;
 public interface UserService {
 	User creatUserByAdmin(RegisterRequest request);
 
-	User updateUser(Long id, User user);
+	User updateUser(Long id, User user) throws Exception;
 
 	void deleteUser(Long userId);
 
