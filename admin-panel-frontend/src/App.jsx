@@ -19,7 +19,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState('user-management');
 
   const [authLoading, setAuthLoading] = useState(loading);
-  console.log(isAuthenticated)
+
   useEffect(() => {
     if (isAuthenticated) {
       setCurrentPage(userRole === 'ADMIN' ? 'user-management' : userRole === 'MANAGER' ? 'manager-dashboard' : 'user-dashboard');
