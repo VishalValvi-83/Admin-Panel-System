@@ -42,6 +42,7 @@ public class SecurityConfig {
 						.requestMatchers("/api/admin/**").hasRole("ADMIN").requestMatchers("/api/manager/**")
 						.hasRole("MANAGER").requestMatchers("/api/user/**").permitAll().anyRequest().authenticated())
 				.httpBasic(withDefaults()).cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+					@SuppressWarnings("null")
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 						CorsConfiguration config = new CorsConfiguration();
