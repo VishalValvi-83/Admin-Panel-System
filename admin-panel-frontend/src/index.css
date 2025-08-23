@@ -1,9 +1,8 @@
 @import "tailwindcss";
-@tailwind utilities;
+
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant sidebar-expanded (&:is(.sidebar-expanded *));
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -52,7 +51,7 @@ button {
   transition: 0.5s;
   background-size: 200% auto;
   cursor: pointer;
-
+  
 }
 
 button:hover {
