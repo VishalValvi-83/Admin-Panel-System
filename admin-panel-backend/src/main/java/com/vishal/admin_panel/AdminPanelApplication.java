@@ -10,7 +10,9 @@ public class AdminPanelApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdminPanelApplication.class, args);
-		System.out.println("Admin Panel Application Started Successfully!");
+		System.out.println("=======================*************************=======================");
+		System.out.println("		Admin Panel Application Started Successfully!");
+		System.out.println("=======================*************************=======================");
 	}
 
 }
