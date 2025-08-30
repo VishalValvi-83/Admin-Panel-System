@@ -5,7 +5,7 @@ export default function ThemeToggle() {
   const { currentTheme, changeCurrentTheme } = useThemeProvider();
 
   return (
-    <div className="">
+    <>
       <input
         type="checkbox"
         name="light-switch"
@@ -18,7 +18,6 @@ export default function ThemeToggle() {
         className="flex items-center justify-center cursor-pointer transition-all w-8 h-8 bg-gray-200 dark:bg-gray-700 hover:bg-gray-100 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-800 rounded-full"
         htmlFor="light-switch"
       >
-        {/* className="dark:hidden block fill-current z-10 text-gray-500 dark:text-gray-400" */}
         <svg
           className="block dark:hidden fill-current text-gray-500 transition-all dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
           width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"> <title>Light theme (sun)</title> <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="M4.93 4.93l1.41 1.41" /> <path d="M17.66 17.66l1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="M4.93 19.07l1.41-1.41" /> <path d="M17.66 6.34l1.41-1.41" /> </g> </svg>
@@ -35,6 +34,6 @@ export default function ThemeToggle() {
         </svg>
         <span className="sr-only">Switch to light / dark version</span>
       </label>
-    </div>
+    </>
   );
 }
