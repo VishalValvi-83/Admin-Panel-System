@@ -104,7 +104,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getAllUsers() {
-		return userRepository.findAll();
+		List<User> users = userRepository.findAll();
+		users.forEach(user -> user.setPassword(null));
+		return users;
 	}
 
 	@Override
