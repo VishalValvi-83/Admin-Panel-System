@@ -2,7 +2,7 @@ package com.vishal.admin_panel.controller.admin;
 
 import java.util.List;
 
- import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
+
     private final UserService userService;
 
     @GetMapping("/test")
@@ -41,10 +42,10 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-//    @PutMapping("/user/update/{id}")
-//    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-//        return userService.updateUser(id, user);
-//    }
+    // @PutMapping("/user/update/{id}")
+    // public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    // return userService.updateUser(id, user);
+    // }
 
     @DeleteMapping("/user/delete/{id}")
     public void deleteUser(@PathVariable Long id) {
