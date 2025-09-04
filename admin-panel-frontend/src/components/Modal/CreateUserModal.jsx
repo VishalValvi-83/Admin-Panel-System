@@ -77,9 +77,9 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
         if (isOpen) {
             if (userToEdit) {
                 setValues({
-                    name: userToEdit.name || '',
+                    name: userToEdit.username || '',
                     email: userToEdit.email || '',
-                    role: userToEdit.role || 'user',
+                    role: userToEdit.role.roleName || 'user',
                     password: '',
                 });
             } else {
@@ -100,15 +100,15 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
         onSave(userData, userToEdit ? userToEdit.id : null);
     };
 
-    const isRoleSelectionDisabled = currentUserRole !== 'admin';
+    const isRoleSelectionDisabled = currentUserRole !== 'ADMIN';
     const roleOptions =
-        currentUserRole === 'admin'
+        currentUserRole === 'ADMIN'
             ? [
                 { value: 'user', label: 'User' },
-                { value: 'manager', label: 'Manager' },
-                { value: 'admin', label: 'Admin' },
+                { value: 'MANAGER', label: 'Manager' },
+                { value: 'ADMIN', label: 'Admin' },
             ]
-            : [{ value: 'user', label: 'User' }];
+            : [{ value: 'USER', label: 'User' }];
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
@@ -138,7 +138,7 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
                         </select>
                         {isRoleSelectionDisabled && (
                             <p className="text-gray-500 text-xs italic mt-1">
-                                Only Admins can change user roles to Manager or Admin.
+                                Only ADMINs can change user roles to MANAGER or ADMIN.
                             </p>
                         )}
                     </div>
