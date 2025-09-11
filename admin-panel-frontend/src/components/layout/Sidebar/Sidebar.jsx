@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const navConfig = {
   ADMIN: [
+    { id: "admin-dashboard", name: "Dashboard" },
     { id: "user-management", name: "User Management" },
     { id: "task-manager", name: "Task Manager" },
     { id: "analytics", name: "Analytics" },
