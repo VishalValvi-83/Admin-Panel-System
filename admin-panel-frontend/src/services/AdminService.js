@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const auth_user = JSON.parse(localStorage.getItem('user'));
 export const AdminService = {
     registerUser: async (userData) => {
         try {
@@ -12,7 +13,19 @@ export const AdminService = {
     },
     getAllUsers: async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/admin/users`);
+            const response = await axios.get(`${API_BASE_URL}/admin/users`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+
+                    },
+                    auth: {
+                        username: 'vvv',
+                        password: 'pass123'
+                    }
+                }
+            );
+            console.table(response.data)
             return response.data;
         } catch (error) {
             console.error("Error fetching users:", error);
