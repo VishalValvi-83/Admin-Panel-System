@@ -1,16 +1,4 @@
-/**
- * Generic modal component for displaying messages or confirmations.
- * Uses Tailwind CSS for styling and includes a backdrop.
- *
- * @param {object} props - Component props.
- * @param {boolean} props.isOpen - Controls the visibility of the modal.
- * @param {string} props.title - The title of the modal.
- * @param {string} props.message - The main message content.
- * @param {function} props.onClose - Function to call when the modal is closed.
- * @param {function} [props.onConfirm] - Optional function for a confirm action (shows a confirm button).
- * @param {string} [props.confirmText="Confirm"] - Text for the confirm button.
- * @param {string} [props.cancelText="Cancel"] - Text for the cancel button.
- */
+
 const MessageModal = ({ isOpen, title, message, onClose, onConfirm, confirmText = "Confirm", cancelText = "Cancel" }) => {
     if (!isOpen) return null;
 

@@ -54,13 +54,17 @@ const FormField = ({ id, label, type, value, onChange, error, ...props }) => (
     </div>
 );
 
+const initialState = {
+    name: '',
+    email: '',
+    role: {
+        role_Id: 2,
+        roleName: 'USER',
+    },
+    password: '',
+};
+
 const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole }) => {
-    const initialState = {
-        name: '',
-        email: '',
-        role: 'user',
-        password: '',
-    };
 
     const validate = (values) => {
         let newErrors = {};
@@ -79,24 +83,34 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
                 setValues({
                     name: userToEdit.username || '',
                     email: userToEdit.email || '',
-                    role: userToEdit.role.roleName || 'user',
-                    password: '',
+                    role: {
+                        role_Id: userToEdit.role.role_Id,
+                        roleName: userToEdit.role.roleName || 'user'
+                    },
                 });
             } else {
                 resetForm();
             }
         }
-    }, [userToEdit, isOpen, setValues, resetForm]);
+    }, [isOpen, userToEdit, resetForm, setValues]);
 
     if (!isOpen) return null;
 
     const handleSave = (formData) => {
         const userData = {
-            name: formData.name,
+            username: formData.name,
             email: formData.email,
-            role: formData.role,
-            ...(formData.password && !userToEdit && { password: formData.password }),
+            role: {
+                role_Id: formData.role.role_Id,
+                roleName: formData.role.roleName
+            },
         };
+
+        if (!userToEdit && formData.password) {
+            userData.password = formData.password;
+        }
+        console.log(userToEdit);
+        console.log(userData);
         onSave(userData, userToEdit ? userToEdit.id : null);
     };
 
@@ -104,11 +118,24 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
     const roleOptions =
         currentUserRole === 'ADMIN'
             ? [
-                { value: 'user', label: 'User' },
-                { value: 'MANAGER', label: 'Manager' },
-                { value: 'ADMIN', label: 'Admin' },
+                { role: { role_Id: 1, roleName: 'ADMIN' }, label: 'Admin' },
+                { role: { role_Id: 2, roleName: 'USER' }, label: 'User' },
+                { role: { role_Id: 3, roleName: 'MANAGER' }, label: 'Manager' },
             ]
-            : [{ value: 'USER', label: 'User' }];
+            : [{ role: { role_Id: 2, roleName: 'USER' }, label: 'User' }];
+
+    const handleRoleChange = (e) => {
+        const roleId = parseInt(e.target.value);
+        const selectedRole = roleOptions.find(
+            (option) => option.role.role_Id === roleId
+        );
+        if (selectedRole) {
+            setValues({
+                ...values,
+                role: selectedRole.role,
+            });
+        }
+    };
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
@@ -127,13 +154,13 @@ const CreateUserModal = ({ isOpen, onClose, onSave, userToEdit, currentUserRole 
                         <select
                             id="role"
                             name="role"
-                            value={values.role}
-                            onChange={handleChange}
+                            value={values.role.role_Id}
+                            onChange={handleRoleChange}
                             disabled={isRoleSelectionDisabled}
                             className={`shadow border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${isRoleSelectionDisabled ? 'bg-gray-100 cursor-not-allowed' : 'border-gray-300'}`}
                         >
                             {roleOptions.map(option => (
-                                <option key={option.value} value={option.value}>{option.label}</option>
+                                <option key={option.role.role_Id} value={option.role.role_Id}>{option.label}</option>
                             ))}
                         </select>
                         {isRoleSelectionDisabled && (
