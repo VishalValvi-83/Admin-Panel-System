@@ -1,0 +1,12 @@
+
+# Build
+.dockerignore
+Dockerfile
+.git
+.gitignore
+README.md
+.git
+.gitignore
+target/
+.idea/
+*.log
