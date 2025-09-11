@@ -49,7 +49,7 @@ const TaskManager = () => {
         <h1 className="text-3xl font-bold">Task Management</h1>
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
           <Plus className="mr-2" size={20} />
-          Create Task
+          Assign Task
         </button>
       </div>
 
